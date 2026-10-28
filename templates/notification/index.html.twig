@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Notifications{% endblock %}
+
+{% block body %}
+<section style="max-width: 720px; margin: 0 auto;">
+    <div class="card" style="padding: 28px;">
+        <h1>Mes notifications</h1>
+
+        {% if notifications is empty %}
+            <p style="color: var(--muted);">Aucune notification pour le moment.</p>
+        {% endif %}
+
+        {% for notification in notifications %}
+            <div style="padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.08);">
+                <div style="font-weight: 700;">{{ notification.content }}</div>
+                <div style="color: var(--muted); font-size: 0.95rem; margin-top: 4px;">
+                    {{ notification.createdAt ? notification.createdAt|date('d/m/Y H:i') : '' }}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

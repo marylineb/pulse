@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier mon profil{% endblock %}
+
+{% block body %}
+<section style="max-width: 760px; margin: 0 auto;">
+    <div class="card" style="padding: 28px;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:16px; flex-wrap:wrap; margin-bottom:24px;">
+            <div>
+                <p style="margin:0 0 8px; color: var(--primary); font-weight:700;">Pulse · Profil</p>
+                <h1 style="margin:0 0 10px;">Compléter mon profil</h1>
+                <p style="margin:0; color: var(--muted);">
+                    Renseigne ton univers, ton énergie et ce que tu veux laisser deviner de toi.
+                </p>
+            </div>
+
+            {% if profile and profile.id %}
+                <a href="{{ path('app_profile_show') }}" class="btn btn-secondary">Voir mon profil</a>
+            {% endif %}
+        </div>
+
+        {{ form_start(form) }}
+
+            <div class="form-row">
+                {{ form_row(form.pseudo) }}
+            </div>
+
+            <div class="form-row">
+                {{ form_row(form.firstname) }}
+            </div>
+
+            <div class="form-row">
+                {{ form_row(form.age) }}
+            </div>
+
+            <div class="form-row">
+                {{ form_row(form.bio) }}
+            </div>
+
+            <div class="form-row">
+                {{ form_row(form.avatar) }}
+            </div>
+
+            <div class="form-row">
+                {{ form_row(form.vibe) }}
+            </div>
+
+            <div class="form-row">
+                {{ form_row(form.interests) }}
+            </div>
+
+            <div style="display:flex; gap:12px; flex-wrap:wrap;">
+                <button type="submit" class="btn btn-primary">Enregistrer mon profil</button>
+
+                {% if profile and profile.id %}
+                    <a href="{{ path('app_profile_show') }}" class="btn btn-secondary">Annuler</a>
+                {% endif %}
+            </div>
+
+        {{ form_end(form) }}
+    </div>
+</section>
+{% endblock %}

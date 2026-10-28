@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes matchs{% endblock %}
+
+{% block body %}
+<section style="max-width: 700px; margin: 0 auto;">
+    <div class="card" style="padding: 28px;">
+        <h1>💘 Mes matchs</h1>
+
+        {% if rooms is empty %}
+            <p style="color: var(--muted);">Aucun match pour le moment.</p>
+        {% endif %}
+
+        {% for room in rooms %}
+            {% set other = room.userOne == currentUser ? room.userTwo : room.userOne %}
+            
+            {# On affiche le pseudo, jamais l'adresse mail. #}
+            {% set otherProfile = other.profile %}
+
+            <div style="padding:16px; border-bottom:1px solid #333;">
+                <strong>{{ otherProfile and otherProfile.pseudo ? otherProfile.pseudo : 'Ton match' }}</strong>
+                <p style="color: var(--muted);">Match trouvé 💘</p>
+                <a href="{{ path('app_chat_show', {id: room.id}) }}" class="btn btn-secondary">Ouvrir la discussion</a>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

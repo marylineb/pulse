@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Envoyer un crush{% endblock %}
+
+{% block body %}
+<section style="max-width: 650px; margin: 0 auto;">
+    <div class="card" style="padding: 28px;">
+        <div style="margin-bottom: 24px;">
+            <p style="color: var(--primary); font-weight:700;">Pulse · Crush</p>
+            <h1>Choisir mon crush</h1>
+            <p style="color: var(--muted);">
+                Sélectionne une personne. Si le choix est mutuel, le match sera révélé.
+            </p>
+        </div>
+
+        {% for message in app.flashes('success') %}
+            <div class="flash-success">{{ message }}</div>
+        {% endfor %}
+
+        {% for message in app.flashes('error') %}
+            <div style="margin-bottom: 18px; padding: 14px 16px; border-radius: 14px; background: rgba(255, 80, 120, 0.12); border: 1px solid rgba(255, 80, 120, 0.28); color: #ffd7e3;">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        {{ form_start(form) }}
+            <div class="form-row">
+                {{ form_row(form.target) }}
+            </div>
+
+            <button type="submit" class="btn btn-primary">Envoyer mon crush</button>
+        {{ form_end(form) }}
+    </div>
+</section>
+{% endblock %}

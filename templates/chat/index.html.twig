@@ -1,0 +1,83 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Discussion{% endblock %}
+
+{% block body %}
+{# Tant que la révélation n'est pas acceptée des deux côtés, on n'affiche que le pseudo. #}
+{% set otherName = otherProfile and otherProfile.pseudo ? otherProfile.pseudo : 'Ton match' %}
+
+<section style="max-width: 760px; margin: 0 auto;">
+    <div class="card" style="padding: 28px;">
+        <div style="margin-bottom: 20px;">
+            <p style="margin:0 0 8px; color: var(--primary); font-weight:700;">Pulse · Chatroom</p>
+            <h1 style="margin:0 0 8px;">{{ otherName }}</h1>
+            <p style="margin:0; color: var(--muted);">
+                Ta discussion est débloquée parce que vous avez matché 💘
+            </p>
+        </div>
+
+        {% for type, flashes in app.flashes %}
+            {% for flash in flashes %}
+                <p style="margin:0 0 12px; color: {{ type == 'error' ? '#ff8fa3' : '#ffd6e7' }};">{{ flash }}</p>
+            {% endfor %}
+        {% endfor %}
+
+        <div class="card" style="padding:18px; background: rgba(255,255,255,0.03); margin-bottom:18px;">
+            {% if chatRoom.revealed %}
+                <p style="margin:0 0 6px; font-weight:700;">Identités révélées 💘</p>
+                <p style="margin:0; color: var(--muted);">
+                    {{ otherName }}{% if otherProfile and otherProfile.firstname %} s'appelle {{ otherProfile.firstname }}{% endif %}.
+                </p>
+            {% elseif revealRequest and revealRequest.requestedBy == app.user %}
+                <p style="margin:0; color: var(--muted);">Demande de révélation envoyée. En attente de la réponse de {{ otherName }}.</p>
+            {% else %}
+                <form method="post" action="{{ path('app_reveal_request', {id: chatRoom.id}) }}" style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+                    <input type="hidden" name="_token" value="{{ csrf_token('reveal' ~ chatRoom.id) }}">
+                    <span style="color: var(--muted);">
+                        {% if revealRequest %}
+                            {{ otherName }} propose de révéler vos identités.
+                        {% else %}
+                            Envie de savoir qui se cache derrière le pseudo ?
+                        {% endif %}
+                    </span>
+                    <button type="submit" class="btn btn-secondary">
+                        {{ revealRequest ? 'Accepter la révélation' : 'Proposer de se révéler' }}
+                    </button>
+                </form>
+            {% endif %}
+        </div>
+
+        <div class="card" style="padding:18px; background: rgba(255,255,255,0.03); max-height:420px; overflow:auto; margin-bottom:18px;">
+            {% if messages is empty %}
+                <p style="margin:0; color: var(--muted);">Aucun message pour le moment. Lance la discussion ✨</p>
+            {% else %}
+                <div style="display:grid; gap:12px;">
+                    {% for message in messages %}
+                        <div style="
+                            padding:12px 14px;
+                            border-radius:16px;
+                            background: {{ message.author == app.user ? 'rgba(255,111,174,0.14)' : 'rgba(255,255,255,0.05)' }};
+                            border: 1px solid rgba(255,255,255,0.08);
+                        ">
+                            <div style="font-size:0.85rem; color: var(--muted); margin-bottom:6px;">
+                                {{ message.author == app.user ? 'Moi' : otherName }}
+                                • {{ message.createdAt ? message.createdAt|date('d/m/Y H:i') : '' }}
+                            </div>
+                            <div>{{ message.content }}</div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <form method="post" style="display:grid; gap:12px;">
+            <input type="hidden" name="_token" value="{{ csrf_token('chat_message' ~ chatRoom.id) }}">
+            <textarea name="content" placeholder="Écris ton message..." maxlength="{{ maxLength }}" required></textarea>
+            <div style="display:flex; gap:12px; flex-wrap:wrap;">
+                <button type="submit" class="btn btn-primary">Envoyer</button>
+                <a href="{{ path('app_home') }}" class="btn btn-secondary">Retour</a>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}

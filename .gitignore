@@ -18,3 +18,19 @@
 /public/assets/
 /assets/vendor/
 ###< symfony/asset-mapper ###
+
+# Les fichiers .env, .env.dev et .env.test restent versionnés : ils ne contiennent que
+# des valeurs par défaut sans secret, et Symfony a besoin de .env pour démarrer.
+# Les vraies valeurs (mots de passe, clés) vont UNIQUEMENT dans .env.local, ignoré ci-dessus.
+
+# Données locales à ne jamais publier
+*.sql
+*.sqlite
+*.db
+/public/uploads/
+
+# Fichiers système / éditeur
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

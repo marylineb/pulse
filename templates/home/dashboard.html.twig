@@ -1,0 +1,143 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pulse · Mon espace{% endblock %}
+
+{% block body %}
+<section style="display:grid; gap: 24px;">
+
+    <div class="card" style="padding: 24px;">
+        <p style="margin:0 0 8px; color: var(--primary); font-weight:700;">Pulse · Dashboard</p>
+        <h1 style="margin:0 0 10px;">Bienvenue {{ user.profile ? user.profile.pseudo : user.email }}</h1>
+        <p style="margin:0; color: var(--muted);">
+            Ton espace personnel pour gérer tes crushs, jouer et discuter avec tes matchs.
+        </p>
+    </div>
+
+    <section class="card" style="padding: 24px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:20px;">
+            <div>
+                <p style="margin:0 0 6px; color: var(--primary); font-weight:700;">Section 1</p>
+                <h2 style="margin:0;">Mes crushs</h2>
+            </div>
+            <a href="{{ path('app_crush_new') }}" class="btn btn-primary">Nouveau crush</a>
+        </div>
+
+        {% if myCrushes is empty %}
+            <p style="color: var(--muted); margin:0;">Tu n’as encore envoyé aucun crush.</p>
+        {% else %}
+            <div style="display:grid; gap:16px;">
+                {% for crush in myCrushes %}
+                    {% set targetProfile = crush.target.profile %}
+                    <article class="card" style="padding:18px; background: rgba(255,255,255,0.03);">
+                        <div style="display:flex; justify-content:space-between; gap:16px; align-items:flex-start; flex-wrap:wrap;">
+                            <div>
+                                <h3 style="margin:0 0 8px;">
+                                    {{ targetProfile and targetProfile.pseudo ? targetProfile.pseudo : 'Profil sans pseudo' }}
+                                </h3>
+
+                                <div style="display:flex; gap:10px; flex-wrap:wrap; color: var(--muted); font-size:0.95rem;">
+                                    {% if targetProfile and targetProfile.age %}
+                                        <span>{{ targetProfile.age }} ans</span>
+                                    {% endif %}
+
+                                    {% if targetProfile and targetProfile.vibe %}
+                                        <span>• {{ targetProfile.vibe }}</span>
+                                    {% endif %}
+                                </div>
+
+                                <p style="margin:10px 0 0; color: var(--muted);">
+                                    Statut :
+                                    {% if crush.isMutual %}
+                                        <strong style="color:#ffd6e7;">Match mutuel 💘</strong>
+                                    {% else %}
+                                        <strong>En attente</strong>
+                                    {% endif %}
+                                </p>
+                            </div>
+
+                            <div>
+                                {% if crush.isMutual %}
+                                    <span class="btn btn-secondary">Matché</span>
+                                {% else %}
+                                    <span class="btn btn-secondary">En attente</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </section>
+
+    <section class="card" style="padding: 24px;">
+        <div style="margin-bottom:20px;">
+            <p style="margin:0 0 6px; color: var(--primary); font-weight:700;">Section 2</p>
+            <h2 style="margin:0;">Mes jeux</h2>
+        </div>
+
+        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:16px;">
+            {% for game in games %}
+                <article class="card" style="padding:18px; background: rgba(255,255,255,0.03);">
+                    <div style="display:flex; justify-content:space-between; gap:10px; align-items:center; margin-bottom:10px;">
+                        <strong>{{ game.title }}</strong>
+                        <span style="font-size:0.85rem; color: var(--muted);">{{ game.type|upper }}</span>
+                    </div>
+
+                    <p style="margin:0 0 14px; color: var(--muted);">
+                        {{ game.description }}
+                    </p>
+
+                    <a href="{{ path('app_game_show', {slug: game.slug}) }}" class="btn btn-secondary">
+                        Jouer
+                    </a>
+                </article>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="card" style="padding: 24px;">
+        <div style="margin-bottom:20px;">
+            <p style="margin:0 0 6px; color: var(--primary); font-weight:700;">Section 3</p>
+            <h2 style="margin:0;">Ma chatroom</h2>
+        </div>
+
+        {% if chatRooms is empty %}
+            <p style="color: var(--muted); margin:0;">Aucune discussion active pour le moment. Il faut au moins un match pour débloquer une discussion.</p>
+        {% else %}
+            <div style="display:grid; gap:16px;">
+                {% for room in chatRooms %}
+                    {% set other = room.userOne == user ? room.userTwo : room.userOne %}
+                    {% set otherProfile = other.profile %}
+
+                    <article class="card" style="padding:18px; background: rgba(255,255,255,0.03);">
+                        <div style="display:flex; justify-content:space-between; gap:16px; align-items:center; flex-wrap:wrap;">
+                            <div>
+                                <h3 style="margin:0 0 6px;">
+                                    {{ otherProfile and otherProfile.pseudo ? otherProfile.pseudo : 'Ton match' }}
+                                </h3>
+
+                                <p style="margin:0; color: var(--muted);">
+                                    Discussion disponible
+                                </p>
+                            </div>
+
+                            <a href="{{ path('app_chat_show', {id: room.id}) }}" class="btn btn-primary">
+                                Ouvrir la discussion
+                            </a>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </section>
+
+</section>
+
+<style>
+    @media (max-width: 900px) {
+        div[style*="grid-template-columns: repeat(3, 1fr)"] {
+            grid-template-columns: 1fr !important;
+        }
+    }
+</style>
+{% endblock %}

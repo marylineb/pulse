@@ -1,0 +1,95 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pulse — Accueil{% endblock %}
+
+{% block body %}
+    <section style="display:grid; grid-template-columns: 1.1fr 0.9fr; gap: 28px; align-items:center; min-height: 72vh;">
+        <div>
+            <div style="display:inline-flex; align-items:center; gap:8px; padding:8px 14px; border-radius:999px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); color:var(--muted); margin-bottom:18px;">
+                Une rencontre plus douce, plus mystérieuse
+            </div>
+
+            <h1 style="font-size: clamp(2.5rem, 7vw, 5rem); line-height: 0.95; margin: 0 0 18px; letter-spacing: -0.05em;">
+                Découvre qui te choisit,
+                <span style="color: var(--primary);">sans tout révéler</span>.
+            </h1>
+
+            <p style="max-width: 620px; font-size: 1.1rem; line-height: 1.7; color: var(--muted); margin-bottom: 28px;">
+                Pulse est une application de connexion anonyme où deux personnes peuvent se découvrir,
+                échanger, se tester et se rapprocher avant une éventuelle révélation mutuelle.
+            </p>
+
+            <div style="display:flex; gap:14px; flex-wrap:wrap;">
+                {% if app.user %}
+                    <a href="{{ path('app_profile_edit') }}" class="btn btn-primary">Compléter mon profil</a>
+                {% else %}
+                    <a href="{{ path('app_register') }}" class="btn btn-primary">Créer un compte</a>
+                    <a href="{{ path('app_login') }}" class="btn btn-secondary">Se connecter</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card" style="padding: 24px;">
+            <div style="display:grid; gap:16px;">
+                <div class="card" style="padding:18px; background: rgba(255,255,255,0.04);">
+                    <div style="font-size:0.9rem; color: var(--muted); margin-bottom:6px;">Étape 1</div>
+                    <div style="font-size:1.1rem; font-weight:700;">Crush mutuel</div>
+                    <p style="margin:8px 0 0; color: var(--muted);">
+                        Deux personnes se choisissent. Rien n’est révélé trop vite.
+                    </p>
+                </div>
+
+                <div class="card" style="padding:18px; background: rgba(255,255,255,0.04);">
+                    <div style="font-size:0.9rem; color: var(--muted); margin-bottom:6px;">Étape 2</div>
+                    <div style="font-size:1.1rem; font-weight:700;">Chat anonyme</div>
+                    <p style="margin:8px 0 0; color: var(--muted);">
+                        Une conversation protégée s’ouvre pour créer un vrai lien.
+                    </p>
+                </div>
+
+                <div class="card" style="padding:18px; background: rgba(255,255,255,0.04);">
+                    <div style="font-size:0.9rem; color: var(--muted); margin-bottom:6px;">Étape 3</div>
+                    <div style="font-size:1.1rem; font-weight:700;">Révélation mutuelle</div>
+                    <p style="margin:8px 0 0; color: var(--muted);">
+                        L’identité n’apparaît que si les deux personnes l’acceptent.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section style="margin-top: 24px; display:grid; grid-template-columns: repeat(3, 1fr); gap:18px;">
+        <article class="card" style="padding:22px;">
+            <h2 style="margin-top:0;">Anonyme</h2>
+            <p style="color:var(--muted); margin-bottom:0;">
+                On protège la découverte. L’intérêt vient avant l’identité.
+            </p>
+        </article>
+
+        <article class="card" style="padding:22px;">
+            <h2 style="margin-top:0;">Sécurisé</h2>
+            <p style="color:var(--muted); margin-bottom:0;">
+                Le chat est pensé pour limiter les échanges trop directs trop vite.
+            </p>
+        </article>
+
+        <article class="card" style="padding:22px;">
+            <h2 style="margin-top:0;">Émotionnel</h2>
+            <p style="color:var(--muted); margin-bottom:0;">
+                Pulse mise sur le lien, la curiosité et la progression.
+            </p>
+        </article>
+    </section>
+
+    <style>
+        @media (max-width: 920px) {
+            section[style*="grid-template-columns: 1.1fr 0.9fr"] {
+                grid-template-columns: 1fr !important;
+            }
+
+            section[style*="grid-template-columns: repeat(3, 1fr)"] {
+                grid-template-columns: 1fr !important;
+            }
+        }
+    </style>
+{% endblock %}
